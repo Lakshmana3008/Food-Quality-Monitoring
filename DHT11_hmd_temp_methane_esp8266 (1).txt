@@ -1,0 +1,86 @@
+#include <dht.h>
+#include <SoftwareSerial.h>
+
+#define DHT11_PIN 7
+#define mth 6
+
+SoftwareSerial mySerial(9,8); //  RX, TX
+
+dht DHT;
+
+void setup()
+{
+  Serial.begin(9600);
+  
+  mySerial.begin(115200);
+  
+  pinMode(13,OUTPUT);
+  
+  pinMode(mth,INPUT);
+  
+  
+  
+  digitalWrite(13,1);
+  delay(700);
+  digitalWrite(13,0);
+  delay(700);
+  digitalWrite(13,1);
+  delay(700);
+  digitalWrite(13,0);
+  delay(700);
+  
+}
+
+void loop()
+{
+  while(1)
+  {
+      digitalWrite(13,0);
+      int chk = DHT.read11(DHT11_PIN);
+
+      int temp = DHT.temperature;
+      int hmd = DHT.humidity;
+
+          stemp = String(temp);
+          
+          shmd = String(hmd);
+      
+    
+      wdata =  String("Temperature:"+stemp+" DegC,  Humidity:"+shmd+" Percentage \r\n"); // concatenating two strings
+      Serial.println(wdata);
+       
+      mySerial.println(wdata);   
+
+      
+    if(digitalRead(mth) == 0)
+    {           
+        digitalWrite(13,1);        
+        wdata =  String("Status : ABNORMAL\r\n"); // concatenating two strings
+                 
+        mySerial.println(wdata);             
+        delay(700);  
+    }
+    
+      
+    if(temp > 40)
+    {           
+        digitalWrite(13,1);        
+        wdata =  String("***ALERT*** High Temperature\r\n"); // concatenating two strings
+                 
+        mySerial.println(wdata);             
+        delay(700);  
+    }
+    
+    if(hmd > 92)
+    {           
+        digitalWrite(13,1);        
+        wdata =  String("***ALERT*** High Humidity\r\n"); // concatenating two strings
+        
+        mySerial.println(wdata);             
+        delay(700);  
+    }
+      
+      
+      delay(1600);        
+    }
+}
