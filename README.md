@@ -65,6 +65,8 @@ if(digitalRead(mth) == 0)
     delay(700);  
 }
 
+
+
 Code
 #include <dht.h>
 #include <SoftwareSerial.h>
